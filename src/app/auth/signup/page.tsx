@@ -3,7 +3,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { signUp } from '@/lib/supabase'
+// TEMPORARY: Use relative import instead of @/ path
+import { signUp } from '../../../lib/supabase'
 import { Eye, EyeOff, CheckCircle } from 'lucide-react'
 
 export default function SignupPage() {
@@ -118,11 +119,15 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        {/* Header */}
+        <div className="text-center">
+          <Link href="/" className="text-3xl font-bold text-primary-600">
+            Appy Link
+          </Link>
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gray-600">
             Or{' '}
             <Link 
               href="/auth/login" 
@@ -233,14 +238,7 @@ export default function SignupPage() {
             </div>
 
             <div className="text-xs text-gray-500 text-center">
-              By creating an account, you agree to our{' '}
-              <Link href="/terms" className="text-primary-600 hover:text-primary-500">
-                Terms of Service
-              </Link>{' '}
-              and{' '}
-              <Link href="/privacy" className="text-primary-600 hover:text-primary-500">
-                Privacy Policy
-              </Link>
+              By creating an account, you agree to our Terms of Service and Privacy Policy
             </div>
           </form>
         </div>
