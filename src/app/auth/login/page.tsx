@@ -4,7 +4,8 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { signIn } from '@/lib/supabase'
+// TEMPORARY: Use relative import instead of @/ path
+import { signIn } from '../../../lib/supabase'
 import { Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
@@ -52,11 +53,15 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        {/* Header */}
+        <div className="text-center">
+          <Link href="/" className="text-3xl font-bold text-primary-600">
+            Appy Link
+          </Link>
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gray-600">
             Or{' '}
             <Link 
               href="/auth/signup" 
@@ -139,15 +144,6 @@ export default function LoginPage() {
               >
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
-            </div>
-
-            <div className="text-center">
-              <Link 
-                href="/auth/forgot-password" 
-                className="text-sm text-primary-600 hover:text-primary-500"
-              >
-                Forgot your password?
-              </Link>
             </div>
           </form>
         </div>
