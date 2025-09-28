@@ -2,9 +2,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useUser } from '@/context/UserContext'
-import { supabase } from '@/lib/supabase'
-import { Save, User } from 'lucide-react'
+// TEMPORARY: Use relative import instead of @/ path
+import { useUser } from '../../context/UserContext'
+import { supabase } from '../../lib/supabase'
+import { Save, User, ArrowLeft } from 'lucide-react'
 
 export default function ProfilePage() {
   const { user, profile, refreshProfile } = useUser()
@@ -88,7 +89,15 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
+      {/* Header */}
       <div className="mb-8">
+        <a 
+          href="/dashboard" 
+          className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-4"
+        >
+          <ArrowLeft className="w-4 h-4 mr-1" />
+          Back to Dashboard
+        </a>
         <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
         <p className="text-gray-600 mt-2">
           Update your account information and preferences
@@ -208,6 +217,12 @@ export default function ProfilePage() {
                 month: 'long',
                 year: 'numeric'
               })}
+            </p>
+          </div>
+          <div>
+            <span className="text-gray-500">Email Verified:</span>
+            <p className="font-medium text-gray-900">
+              {user.email_confirmed_at ? 'Yes' : 'No'}
             </p>
           </div>
         </div>
