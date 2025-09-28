@@ -3,7 +3,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useUser } from '@/context/UserContext'
+// TEMPORARY: Use relative import instead of @/ path
+import { useUser } from '../context/UserContext'
 import { Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react'
 
 export default function Navigation() {
