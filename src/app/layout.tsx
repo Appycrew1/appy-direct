@@ -1,8 +1,9 @@
 // src/app/layout.tsx
 import './globals.css'
 import type { Metadata } from 'next'
-import { UserProvider } from '@/context/UserContext'
-import Navigation from '@/components/Navigation'
+// TEMPORARY: Use relative import instead of @/ path
+import { UserProvider } from '../context/UserContext'
+import Navigation from '../components/Navigation'
 
 export const metadata: Metadata = {
   title: 'Appy Link - Connect with Moving Industry Suppliers',
