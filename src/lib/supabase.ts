@@ -1,21 +1,57 @@
-import { createBrowserClient } from '@supabase/ssr'
+// src/lib/supabase.ts
+import { createBrowserClient, createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Browser client for client-side operations
+export const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
+// Auth helper functions
+export const signUp = async (email: string, password: string, userData?: any) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: userData,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+    }
+  })
+  return { data, error }
+}
+
+export const signIn = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  })
+  return { data, error }
+}
+
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut()
+  return { error }
+}
+
+export const getCurrentUser = async () => {
+  const { data: { user }, error } = await supabase.auth.getUser()
+  return { user, error }
+}
+
+// Server-side client for API routes and server components
 export const createClient = () => {
-  return createBrowserClient(supabaseUrl, supabaseAnonKey)
-}
+  const cookieStore = cookies()
 
-// Optional: Helper function for getting user
-export async function getCurrentUser() {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  return user
-}
-
-// Optional: Helper function for sign out
-export async function signOut() {
-  const supabase = createClient()
-  await supabase.auth.signOut()
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+      },
+    }
+  )
 }
