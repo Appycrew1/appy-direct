@@ -1,8 +1,9 @@
 // src/app/dashboard/page.tsx
 'use client'
 
-import { useUser } from '@/context/UserContext'
-import { User, Building, Mail, Calendar } from 'lucide-react'
+// TEMPORARY: Use relative import instead of @/ path
+import { useUser } from '../../context/UserContext'
+import { User, Building, Mail, Calendar, ExternalLink } from 'lucide-react'
 
 export default function DashboardPage() {
   const { user, profile, loading } = useUser()
@@ -38,7 +39,7 @@ export default function DashboardPage() {
           Welcome{profile?.full_name ? `, ${profile.full_name}` : ''}!
         </h1>
         <p className="text-gray-600 mt-2">
-          Manage your suppliers and grow your moving business
+          Manage your suppliers and grow your moving business with Appy Link
         </p>
       </div>
 
@@ -105,33 +106,44 @@ export default function DashboardPage() {
           </p>
           <a 
             href="/suppliers" 
-            className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+            className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
           >
-            Browse Now →
+            Browse Now <ExternalLink className="w-4 h-4 ml-1" />
           </a>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Contact Support</h3>
           <p className="text-gray-600 text-sm mb-4">
-            Get help with your account or platform
+            Get help with your account or the platform
           </p>
           <a 
             href="/contact" 
-            className="text-primary-600 hover:text-primary-700 font-medium text-sm"
+            className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
           >
-            Contact Us →
+            Contact Us <ExternalLink className="w-4 h-4 ml-1" />
           </a>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Coming Soon</h3>
           <p className="text-gray-600 text-sm mb-4">
-            Favorites, quotes, and more features are coming
+            Favorites, quotes, and more features are on the way
           </p>
           <span className="text-gray-400 text-sm">
-            Stay tuned!
+            Stay tuned! 🚀
           </span>
+        </div>
+      </div>
+
+      {/* Welcome Tips */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+        <h3 className="text-lg font-semibold text-blue-900 mb-2">Getting Started</h3>
+        <div className="text-blue-800 text-sm space-y-2">
+          <p>✅ Your account is set up and ready to go!</p>
+          <p>🔍 Browse our directory of vetted suppliers</p>
+          <p>💾 Save your favorite suppliers (coming soon)</p>
+          <p>📝 Request quotes directly from suppliers (coming soon)</p>
         </div>
       </div>
 
@@ -141,7 +153,7 @@ export default function DashboardPage() {
           <h3 className="font-semibold mb-2">Debug Info (Dev Only)</h3>
           <pre className="text-xs text-gray-600 overflow-auto">
             {JSON.stringify({ 
-              user: user ? { id: user.id, email: user.email } : null,
+              user: user ? { id: user.id, email: user.email, emailConfirmed: user.email_confirmed_at } : null,
               profile: profile 
             }, null, 2)}
           </pre>
