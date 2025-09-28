@@ -1,12 +1,11 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+// src/app/layout.tsx
 import './globals.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import type { Metadata } from 'next'
+import { UserProvider } from '@/context/UserContext'
 
 export const metadata: Metadata = {
-  title: 'Appy Link - UK Moving Suppliers Directory',
-  description: 'Find and compare vetted UK moving suppliers. CRM software, equipment rental, insurance, and more for removal companies.',
+  title: 'Appy Link - Connect with Moving Industry Suppliers',
+  description: 'Find and connect with vetted suppliers for moving companies across the UK. Software, insurance, equipment, leads and more.',
 }
 
 export default function RootLayout({
@@ -16,76 +15,119 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="min-h-screen bg-gray-50">
-          <header className="bg-white shadow-sm border-b">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center h-16">
-                <div className="flex items-center">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">AL</span>
-                    </div>
-                    <span className="text-xl font-bold text-gray-900">Appy Link</span>
+      <body className="min-h-screen bg-gray-50">
+        <UserProvider>
+          <div className="min-h-screen flex flex-col">
+            <header className="bg-white shadow-sm border-b">
+              <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between h-16">
+                  <div className="flex items-center">
+                    <a href="/" className="text-2xl font-bold text-primary-600">
+                      Appy Link
+                    </a>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <a href="/suppliers" className="text-gray-700 hover:text-primary-600">
+                      Suppliers
+                    </a>
+                    <a href="/contact" className="text-gray-700 hover:text-primary-600">
+                      Contact
+                    </a>
+                    <AuthButtons />
                   </div>
                 </div>
-                <nav className="hidden md:flex space-x-8">
-                  <a href="/" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                    Home
-                  </a>
-                  <a href="/suppliers" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                    Suppliers
-                  </a>
-                  <a href="/contact" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                    Contact
-                  </a>
-                </nav>
-              </div>
-            </div>
-          </header>
-          
-          <main>{children}</main>
-          
-          <footer className="bg-gray-900 text-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                  <div className="flex items-center space-x-2 mb-4">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">AL</span>
-                    </div>
-                    <span className="text-xl font-bold">Appy Link</span>
-                  </div>
-                  <p className="text-gray-400 text-sm">
-                    Connecting UK movers with the best suppliers.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold mb-4">Quick Links</h3>
-                  <ul className="space-y-2 text-gray-400 text-sm">
-                    <li><a href="/" className="hover:text-white">Home</a></li>
-                    <li><a href="/suppliers" className="hover:text-white">Suppliers</a></li>
-                    <li><a href="/contact" className="hover:text-white">Contact</a></li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold mb-4">Contact</h3>
-                  <p className="text-gray-400 text-sm">
-                    Email: hello@appylink.co.uk<br />
-                    Phone: +44 20 1234 5678
-                  </p>
-                </div>
-              </div>
-              
-              <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+              </nav>
+            </header>
+            
+            <main className="flex-1">
+              {children}
+            </main>
+            
+            <footer className="bg-gray-800 text-white py-8">
+              <div className="max-w-7xl mx-auto px-4 text-center">
                 <p>&copy; 2024 Appy Link. All rights reserved.</p>
               </div>
-            </div>
-          </footer>
-        </div>
+            </footer>
+          </div>
+        </UserProvider>
       </body>
     </html>
+  )
+}
+
+// Auth buttons component
+'use client'
+import { useUser } from '@/context/UserContext'
+import Link from 'next/link'
+import { User, LogOut } from 'lucide-react'
+import { useState } from 'react'
+
+function AuthButtons() {
+  const { user, profile, signOut, loading } = useUser()
+  const [showMenu, setShowMenu] = useState(false)
+
+  if (loading) {
+    return <div className="w-20 h-8 bg-gray-200 animate-pulse rounded"></div>
+  }
+
+  if (user) {
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setShowMenu(!showMenu)}
+          className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-colors"
+        >
+          <User className="w-5 h-5" />
+          <span>{profile?.full_name || 'Account'}</span>
+        </button>
+
+        {showMenu && (
+          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
+            <Link
+              href="/dashboard"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={() => setShowMenu(false)}
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/profile"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={() => setShowMenu(false)}
+            >
+              Profile
+            </Link>
+            <hr className="my-1" />
+            <button
+              onClick={async () => {
+                await signOut()
+                setShowMenu(false)
+              }}
+              className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-center space-x-4">
+      <Link
+        href="/auth/login"
+        className="text-gray-700 hover:text-primary-600 transition-colors"
+      >
+        Sign In
+      </Link>
+      <Link
+        href="/auth/signup"
+        className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors"
+      >
+        Sign Up
+      </Link>
+    </div>
   )
 }
